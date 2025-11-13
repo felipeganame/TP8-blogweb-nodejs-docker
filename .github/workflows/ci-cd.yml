@@ -469,7 +469,7 @@ jobs:
         echo "  ghcr.io/${{ github.repository_owner }}/blogweb-backend:latest"
         echo "  ghcr.io/${{ github.repository_owner }}/blogweb-frontend:latest"
         echo ""
-        echo "☁️ SonarCloud: https://sonarcloud.io/dashboard?id=2222270_TP8"
+        echo "☁️ SonarCloud: https://sonarcloud.io/project/overview?id=felipeganame_TP8-blogweb-nodejs-docker"
         echo ""
         echo "=========================================="
         
