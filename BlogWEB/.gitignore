@@ -1,0 +1,20 @@
+node_modules/
+.env
+*.log
+.DS_Store
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Azure
+.azure/
+
+# Azure Secrets - NO SUBIR
+cosmos-connection.txt
+jwt-secret.txt
+azure-setup.log
+webapp-names.txt
+azure-connection-string.txt
+azure-webapps-urls.txt

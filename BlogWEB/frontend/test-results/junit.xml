@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="114" failures="0" errors="0" time="0.993">
+  <testsuite name="Comments Module" errors="0" failures="0" skipped="0" timestamp="2025-11-12T13:56:45" time="0.266" tests="37">
+    <testcase classname="Comments Module › DOM Structure" name="should have required DOM elements" time="0.009">
+    </testcase>
+    <testcase classname="Comments Module › showComments function" name="should render comments container when user is authenticated" time="0.01">
+    </testcase>
+    <testcase classname="Comments Module › showComments function" name="should render comments container without form when user is not authenticated" time="0.005">
+    </testcase>
+    <testcase classname="Comments Module › showComments function" name="should load comments on initialization" time="0.034">
+    </testcase>
+    <testcase classname="Comments Module › showComments function" name="should display empty state when no comments exist" time="0.002">
+    </testcase>
+    <testcase classname="Comments Module › showComments function" name="should display comment form for authenticated users" time="0.001">
+    </testcase>
+    <testcase classname="Comments Module › showComments function" name="should display login message for unauthenticated users" time="0.001">
+    </testcase>
+    <testcase classname="Comments Module › loadComments function" name="should display comments correctly" time="0.002">
+    </testcase>
+    <testcase classname="Comments Module › loadComments function" name="should show delete button only for own comments" time="0.003">
+    </testcase>
+    <testcase classname="Comments Module › loadComments function" name="should handle error when loading comments fails" time="0.003">
+    </testcase>
+    <testcase classname="Comments Module › loadComments function" name="should escape HTML in comment content" time="0.002">
+    </testcase>
+    <testcase classname="Comments Module › handleCreateComment function" name="should create comment when form is submitted" time="0.021">
+    </testcase>
+    <testcase classname="Comments Module › handleCreateComment function" name="should clear textarea after successful comment creation" time="0.025">
+    </testcase>
+    <testcase classname="Comments Module › handleCreateComment function" name="should display success message after creating comment" time="0.013">
+    </testcase>
+    <testcase classname="Comments Module › handleCreateComment function" name="should reload comments after creating new comment" time="0.011">
+    </testcase>
+    <testcase classname="Comments Module › handleCreateComment function" name="should display error message when comment creation fails" time="0.013">
+    </testcase>
+    <testcase classname="Comments Module › handleCreateComment function" name="should prevent default form submission" time="0.002">
+    </testcase>
+    <testcase classname="Comments Module › deleteComment function" name="should call confirm before deleting" time="0">
+    </testcase>
+    <testcase classname="Comments Module › deleteComment function" name="should not delete if user cancels confirmation" time="0.001">
+    </testcase>
+    <testcase classname="Comments Module › deleteComment function" name="should reload comments after successful deletion" time="0.001">
+    </testcase>
+    <testcase classname="Comments Module › deleteComment function" name="should show alert on deletion error" time="0">
+    </testcase>
+    <testcase classname="Comments Module › escapeHtml utility (if exported)" name="should escape HTML in text content" time="0">
+    </testcase>
+    <testcase classname="Comments Module › escapeHtml utility (if exported)" name="should handle special characters" time="0">
+    </testcase>
+    <testcase classname="Comments Module › Date formatting" name="should format dates correctly" time="0.001">
+    </testcase>
+    <testcase classname="Comments Module › Date formatting" name="should handle different date formats" time="0">
+    </testcase>
+    <testcase classname="Comments Module › Comment validation" name="should validate comment content length" time="0.001">
+    </testcase>
+    <testcase classname="Comments Module › Comment validation" name="should detect empty comments" time="0">
+    </testcase>
+    <testcase classname="Comments Module › DOM manipulation utilities" name="should create comment card HTML structure" time="0.001">
+    </testcase>
+    <testcase classname="Comments Module › DOM manipulation utilities" name="should create delete button for own comments" time="0.001">
+    </testcase>
+    <testcase classname="Comments Module › DOM manipulation utilities" name="should not create delete button for other users comments" time="0.001">
+    </testcase>
+    <testcase classname="Comments Module › Empty state handling" name="should show empty state message when no comments" time="0.001">
+    </testcase>
+    <testcase classname="Comments Module › Empty state handling" name="should not show empty state when comments exist" time="0">
+    </testcase>
+    <testcase classname="Comments Module › Authentication state display" name="should show comment form when user is authenticated" time="0.001">
+    </testcase>
+    <testcase classname="Comments Module › Authentication state display" name="should show login message when user is not authenticated" time="0">
+    </testcase>
+    <testcase classname="Comments Module › Form validation" name="should validate textarea has content" time="0">
+    </testcase>
+    <testcase classname="Comments Module › Form validation" name="should reject empty textarea" time="0.001">
+    </testcase>
+    <testcase classname="Comments Module › Form validation" name="should reject whitespace-only textarea" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="Register Module" errors="0" failures="0" skipped="0" timestamp="2025-11-12T13:56:45" time="0.137" tests="21">
+    <testcase classname="Register Module › showRegister" name="should render register form" time="0.006">
+    </testcase>
+    <testcase classname="Register Module › showRegister" name="should render username input with correct attributes" time="0.001">
+    </testcase>
+    <testcase classname="Register Module › showRegister" name="should render email input with correct type" time="0.002">
+    </testcase>
+    <testcase classname="Register Module › showRegister" name="should render password input with minimum length" time="0.001">
+    </testcase>
+    <testcase classname="Register Module › showRegister" name="should render submit button" time="0.002">
+    </testcase>
+    <testcase classname="Register Module › showRegister" name="should render login link button" time="0.001">
+    </testcase>
+    <testcase classname="Register Module › showRegister" name="should render error container" time="0.002">
+    </testcase>
+    <testcase classname="Register Module › handleRegister form submission" name="should call api.register with form data on submit" time="0.012">
+    </testcase>
+    <testcase classname="Register Module › handleRegister form submission" name="should call auth.setUser on successful registration" time="0.013">
+    </testcase>
+    <testcase classname="Register Module › handleRegister form submission" name="should reload page on successful registration" time="0.013">
+    </testcase>
+    <testcase classname="Register Module › handleRegister form submission" name="should display error message on registration failure" time="0.013">
+    </testcase>
+    <testcase classname="Register Module › handleRegister form submission" name="should not reload page on registration failure" time="0.013">
+    </testcase>
+    <testcase classname="Register Module › handleRegister form submission" name="should prevent default form submission" time="0.001">
+    </testcase>
+    <testcase classname="Register Module › Form validation" name="should have required attribute on username input" time="0.001">
+    </testcase>
+    <testcase classname="Register Module › Form validation" name="should have required attribute on email input" time="0.001">
+    </testcase>
+    <testcase classname="Register Module › Form validation" name="should have required attribute on password input" time="0.001">
+    </testcase>
+    <testcase classname="Register Module › Form validation" name="should enforce minimum username length of 3" time="0.001">
+    </testcase>
+    <testcase classname="Register Module › Form validation" name="should enforce minimum password length of 6" time="0.001">
+    </testcase>
+    <testcase classname="Register Module › Form inputs collect correct data" name="should collect username from input" time="0.001">
+    </testcase>
+    <testcase classname="Register Module › Form inputs collect correct data" name="should collect email from input" time="0.001">
+    </testcase>
+    <testcase classname="Register Module › Form inputs collect correct data" name="should collect password from input" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="Login Module" errors="0" failures="0" skipped="0" timestamp="2025-11-12T13:56:45" time="0.123" tests="16">
+    <testcase classname="Login Module › showLogin" name="should render login form" time="0.005">
+    </testcase>
+    <testcase classname="Login Module › showLogin" name="should render email input with correct type" time="0.001">
+    </testcase>
+    <testcase classname="Login Module › showLogin" name="should render password input with correct type" time="0.001">
+    </testcase>
+    <testcase classname="Login Module › showLogin" name="should render submit button" time="0.001">
+    </testcase>
+    <testcase classname="Login Module › showLogin" name="should render register link button" time="0.001">
+    </testcase>
+    <testcase classname="Login Module › showLogin" name="should render error container" time="0.001">
+    </testcase>
+    <testcase classname="Login Module › handleLogin form submission" name="should call api.login with form data on submit" time="0.012">
+    </testcase>
+    <testcase classname="Login Module › handleLogin form submission" name="should call auth.setUser on successful login" time="0.013">
+    </testcase>
+    <testcase classname="Login Module › handleLogin form submission" name="should reload page on successful login" time="0.012">
+    </testcase>
+    <testcase classname="Login Module › handleLogin form submission" name="should display error message on login failure" time="0.011">
+    </testcase>
+    <testcase classname="Login Module › handleLogin form submission" name="should not reload page on login failure" time="0.012">
+    </testcase>
+    <testcase classname="Login Module › handleLogin form submission" name="should prevent default form submission" time="0.001">
+    </testcase>
+    <testcase classname="Login Module › Form validation" name="should have required attribute on email input" time="0.001">
+    </testcase>
+    <testcase classname="Login Module › Form validation" name="should have required attribute on password input" time="0">
+    </testcase>
+    <testcase classname="Login Module › Form validation" name="should have email type for email input" time="0.001">
+    </testcase>
+    <testcase classname="Login Module › Form validation" name="should have password type for password input" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="API Module" errors="0" failures="0" skipped="0" timestamp="2025-11-12T13:56:45" time="0.06" tests="21">
+    <testcase classname="API Module › register" name="should make POST request to register endpoint" time="0.001">
+    </testcase>
+    <testcase classname="API Module › register" name="should throw error on failed registration" time="0.003">
+    </testcase>
+    <testcase classname="API Module › register" name="should send correct headers and body" time="0">
+    </testcase>
+    <testcase classname="API Module › login" name="should make POST request to login endpoint" time="0">
+    </testcase>
+    <testcase classname="API Module › login" name="should throw error on invalid credentials" time="0">
+    </testcase>
+    <testcase classname="API Module › login" name="should send correct data to login endpoint" time="0.001">
+    </testcase>
+    <testcase classname="API Module › getComments" name="should fetch all comments" time="0">
+    </testcase>
+    <testcase classname="API Module › getComments" name="should make GET request to comments endpoint" time="0.001">
+    </testcase>
+    <testcase classname="API Module › getComments" name="should throw error when fetch fails" time="0">
+    </testcase>
+    <testcase classname="API Module › createComment" name="should create a comment with authentication" time="0">
+    </testcase>
+    <testcase classname="API Module › createComment" name="should include authorization header" time="0.001">
+    </testcase>
+    <testcase classname="API Module › createComment" name="should send content in request body" time="0">
+    </testcase>
+    <testcase classname="API Module › createComment" name="should throw error when unauthorized" time="0">
+    </testcase>
+    <testcase classname="API Module › deleteComment" name="should delete a comment by ID" time="0.001">
+    </testcase>
+    <testcase classname="API Module › deleteComment" name="should include comment ID in URL" time="0">
+    </testcase>
+    <testcase classname="API Module › deleteComment" name="should include authorization header" time="0.001">
+    </testcase>
+    <testcase classname="API Module › deleteComment" name="should throw error when deletion fails" time="0">
+    </testcase>
+    <testcase classname="API Module › deleteComment" name="should throw error when user not authorized to delete" time="0">
+    </testcase>
+    <testcase classname="API Module › Error handling" name="should handle network errors" time="0.001">
+    </testcase>
+    <testcase classname="API Module › Error handling" name="should handle response without message" time="0">
+    </testcase>
+    <testcase classname="API Module › Error handling" name="should handle invalid JSON response" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="Auth Module" errors="0" failures="0" skipped="0" timestamp="2025-11-12T13:56:45" time="0.056" tests="19">
+    <testcase classname="Auth Module › getUser" name="should return null when no user is stored" time="0.001">
+    </testcase>
+    <testcase classname="Auth Module › getUser" name="should return user object when user is stored" time="0.001">
+    </testcase>
+    <testcase classname="Auth Module › getUser" name="should handle malformed JSON in localStorage gracefully" time="0.003">
+    </testcase>
+    <testcase classname="Auth Module › getToken" name="should return null when no token is stored" time="0.001">
+    </testcase>
+    <testcase classname="Auth Module › getToken" name="should return token when token is stored" time="0">
+    </testcase>
+    <testcase classname="Auth Module › setUser" name="should store user data in localStorage" time="0">
+    </testcase>
+    <testcase classname="Auth Module › setUser" name="should store user and token separately" time="0">
+    </testcase>
+    <testcase classname="Auth Module › setUser" name="should overwrite existing user data" time="0">
+    </testcase>
+    <testcase classname="Auth Module › logout" name="should remove user and token from localStorage" time="0">
+    </testcase>
+    <testcase classname="Auth Module › logout" name="should not throw error when no data exists" time="0.001">
+    </testcase>
+    <testcase classname="Auth Module › logout" name="should remove only user and token, not other localStorage items" time="0">
+    </testcase>
+    <testcase classname="Auth Module › isAuthenticated" name="should return false when no token exists" time="0">
+    </testcase>
+    <testcase classname="Auth Module › isAuthenticated" name="should return true when token exists" time="0">
+    </testcase>
+    <testcase classname="Auth Module › isAuthenticated" name="should return false when token is removed" time="0">
+    </testcase>
+    <testcase classname="Auth Module › isAuthenticated" name="should return false when token is empty string" time="0">
+    </testcase>
+    <testcase classname="Auth Module › isAuthenticated" name="should return true for any non-empty token" time="0">
+    </testcase>
+    <testcase classname="Auth Module › Integration scenarios" name="should handle complete login flow" time="0">
+    </testcase>
+    <testcase classname="Auth Module › Integration scenarios" name="should handle complete logout flow" time="0.001">
+    </testcase>
+    <testcase classname="Auth Module › Integration scenarios" name="should persist data across function calls" time="0">
+    </testcase>
+  </testsuite>
+</testsuites>

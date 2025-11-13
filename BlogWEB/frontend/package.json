@@ -1,0 +1,36 @@
+{
+  "name": "blogweb-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for BlogWEB application",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "build": "echo 'No build step required for frontend'",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:watch": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --watch",
+    "test:coverage": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --coverage --coverageReporters=lcov --coverageReporters=cobertura --coverageReporters=text"
+  },
+  "keywords": [
+    "blog",
+    "frontend",
+    "azure"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@testing-library/dom": "^10.4.1",
+    "cross-env": "^10.1.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-junit": "^16.0.0",
+    "nyc": "^17.1.0"
+  }
+}

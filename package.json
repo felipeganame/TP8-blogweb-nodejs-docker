@@ -1,0 +1,38 @@
+{
+  "name": "tp7-blogweb",
+  "version": "1.0.0",
+  "description": "TP7 BlogWEB - Integration with SonarCloud, Code Coverage and Cypress",
+  "type": "module",
+  "scripts": {
+    "start:backend": "cd BlogWEB/backend && npm start",
+    "start:frontend": "cd BlogWEB/frontend && npm start",
+    "test:backend": "cd BlogWEB/backend && npm test",
+    "test:frontend": "cd BlogWEB/frontend && npm test",
+    "test:coverage:backend": "cd BlogWEB/backend && npm run test:coverage",
+    "test:coverage:frontend": "cd BlogWEB/frontend && npm run test:coverage",
+    "test:e2e": "cypress run --reporter junit --reporter-options mochaFile=cypress/results/junit-[hash].xml",
+    "test:e2e:open": "cypress open",
+    "cypress:run": "cypress run",
+    "cypress:open": "cypress open",
+    "install:all": "npm install && cd BlogWEB/backend && npm install && cd ../frontend && npm install",
+    "sonar:scan": "sonar-scanner"
+  },
+  "keywords": [
+    "cypress",
+    "sonarcloud",
+    "coverage",
+    "testing",
+    "azure-devops"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "cypress": "^13.17.0",
+    "mocha": "^10.8.2",
+    "mocha-junit-reporter": "^2.2.1",
+    "nyc": "^17.1.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

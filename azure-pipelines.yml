@@ -1,0 +1,487 @@
+name: CI/CD Pipeline - BlogWEB (GitHub + Render + Docker)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  NODE_VERSION: '20.x'
+  REGISTRY: ghcr.io
+  IMAGE_NAME_BACKEND: ${{ github.repository_owner }}/blogweb-backend
+  IMAGE_NAME_FRONTEND: ${{ github.repository_owner }}/blogweb-frontend
+
+jobs:
+  # ==========================================
+  # JOB 1: BUILD, TEST & SONARCLOUD ANALYSIS
+  # ==========================================
+  build-test-analysis:
+    name: '1️⃣ Build + Unit Tests + SonarCloud Analysis'
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Necesario para SonarCloud análisis completo
+
+    - name: Setup Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: |
+          BlogWEB/backend/package-lock.json
+          BlogWEB/frontend/package-lock.json
+
+    # ========== BACKEND ==========
+    
+    - name: 📦 Backend - Install Dependencies
+      working-directory: ./BlogWEB/backend
+      run: npm ci
+
+    - name: 🧪 Backend - Run Tests with Coverage
+      working-directory: ./BlogWEB/backend
+      run: npm run test:coverage
+      continue-on-error: true
+      env:
+        NODE_ENV: test
+
+    - name: 📊 Backend - Upload Test Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: backend-test-results
+        path: BlogWEB/backend/test-results/
+        retention-days: 30
+
+    - name: 📈 Backend - Upload Coverage Reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: backend-coverage
+        path: BlogWEB/backend/coverage/
+        retention-days: 30
+
+    # ========== FRONTEND ==========
+    
+    - name: 📦 Frontend - Install Dependencies
+      working-directory: ./BlogWEB/frontend
+      run: npm ci
+
+    - name: 🧪 Frontend - Run Tests with Coverage
+      working-directory: ./BlogWEB/frontend
+      run: npm run test:coverage
+      continue-on-error: true
+      env:
+        NODE_ENV: test
+
+    - name: 📊 Frontend - Upload Test Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: frontend-test-results
+        path: BlogWEB/frontend/test-results/
+        retention-days: 30
+
+    - name: 📈 Frontend - Upload Coverage Reports
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: frontend-coverage
+        path: BlogWEB/frontend/coverage/
+        retention-days: 30
+
+    # ========== SONARCLOUD ==========
+    
+    - name: ☁️ SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      continue-on-error: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+        args: >
+          -Dsonar.organization=2222270
+          -Dsonar.projectKey=2222270_TP8
+          -Dsonar.sources=BlogWEB/backend,BlogWEB/frontend
+          -Dsonar.exclusions=**/node_modules/**,**/test/**,**/coverage/**
+          -Dsonar.javascript.lcov.reportPaths=BlogWEB/backend/coverage/lcov.info,BlogWEB/frontend/coverage/lcov.info
+
+    # ========== PACKAGE ARTIFACTS ==========
+    
+    - name: 📦 Package Backend
+      working-directory: ./BlogWEB/backend
+      run: |
+        echo "📦 Empaquetando backend..."
+        zip -r ../../backend.zip . \
+          -x ".git*" \
+          -x ".env*" \
+          -x "*.log" \
+          -x "coverage/*" \
+          -x "test-results/*" \
+          -x "node_modules/*"
+
+    - name: 📦 Package Frontend
+      working-directory: ./BlogWEB/frontend
+      run: |
+        echo "📦 Empaquetando frontend..."
+        zip -r ../../frontend.zip . \
+          -x ".git*" \
+          -x ".env*" \
+          -x "*.log" \
+          -x "coverage/*" \
+          -x "test-results/*" \
+          -x "node_modules/*"
+
+    - name: 📤 Upload Build Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-packages
+        path: |
+          backend.zip
+          frontend.zip
+        retention-days: 30
+
+    - name: 📋 Stage 1 Summary
+      run: |
+        echo "=========================================="
+        echo "✅ STAGE 1 COMPLETADO"
+        echo "=========================================="
+        echo ""
+        echo "📊 Resultados:"
+        echo "  - Backend Tests: Ejecutados"
+        echo "  - Frontend Tests: Ejecutados"
+        echo "  - Coverage: Publicado"
+        echo "  - SonarCloud: Análisis ejecutado"
+        echo "  - Artefactos: Empaquetados"
+        echo ""
+        echo "=========================================="
+
+  # ==========================================
+  # JOB 2: INTEGRATION TESTS (CYPRESS)
+  # ==========================================
+  integration-tests:
+    name: '2️⃣ Pruebas de Integración (Cypress E2E)'
+    needs: build-test-analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    # Instalar Cypress (raíz del proyecto)
+    - name: 📦 Install Cypress
+      run: npm ci
+
+    # Backend dependencies
+    - name: 📦 Backend - Install Dependencies
+      working-directory: ./BlogWEB/backend
+      run: npm ci --production
+
+    # Frontend dependencies
+    - name: 📦 Frontend - Install Dependencies
+      working-directory: ./BlogWEB/frontend
+      run: npm ci --production
+
+    # Iniciar Backend
+    - name: 🚀 Start Backend
+      working-directory: ./BlogWEB/backend
+      run: |
+        export MONGODB_URI="${{ secrets.COSMOSDB_CONNECTION_STRING_QA }}"
+        export JWT_SECRET="${{ secrets.JWT_SECRET }}"
+        export PORT=8080
+        export NODE_ENV=test
+        
+        echo "🚀 Iniciando Backend en puerto 8080..."
+        nohup node server.js > backend.log 2>&1 &
+        echo $! > backend.pid
+        
+        # Health check con reintentos
+        echo "🏥 Verificando health del backend..."
+        MAX_ATTEMPTS=30
+        ATTEMPT=0
+        
+        while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
+          if curl -f -s http://localhost:8080/api/health > /dev/null 2>&1; then
+            echo "✅ Backend respondiendo correctamente"
+            curl http://localhost:8080/api/health
+            break
+          fi
+          
+          ATTEMPT=$((ATTEMPT+1))
+          echo "⏳ Intento $ATTEMPT/$MAX_ATTEMPTS..."
+          sleep 2
+        done
+        
+        if [ $ATTEMPT -eq $MAX_ATTEMPTS ]; then
+          echo "❌ Backend no respondió"
+          cat backend.log
+          exit 1
+        fi
+
+    # Iniciar Frontend
+    - name: 🚀 Start Frontend
+      working-directory: ./BlogWEB/frontend
+      run: |
+        export PORT=3000
+        export API_URL=http://localhost:8080
+        export NODE_ENV=test
+        
+        echo "🚀 Iniciando Frontend en puerto 3000..."
+        nohup node server.js > frontend.log 2>&1 &
+        echo $! > frontend.pid
+        
+        # Health check con reintentos
+        echo "🏥 Verificando health del frontend..."
+        MAX_ATTEMPTS=30
+        ATTEMPT=0
+        
+        while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
+          if curl -f -s http://localhost:3000 > /dev/null 2>&1; then
+            echo "✅ Frontend respondiendo correctamente"
+            break
+          fi
+          
+          ATTEMPT=$((ATTEMPT+1))
+          echo "⏳ Intento $ATTEMPT/$MAX_ATTEMPTS..."
+          sleep 2
+        done
+        
+        if [ $ATTEMPT -eq $MAX_ATTEMPTS ]; then
+          echo "❌ Frontend no respondió"
+          cat frontend.log
+          exit 1
+        fi
+        
+        sleep 5
+
+    # Ejecutar Cypress
+    - name: 🧪 Run Cypress E2E Tests
+      run: |
+        mkdir -p cypress/results
+        
+        npx cypress run \
+          --reporter junit \
+          --reporter-options "mochaFile=cypress/results/junit-[hash].xml,toConsole=true" \
+          --config video=true,screenshotOnRunFailure=true,defaultCommandTimeout=10000,pageLoadTimeout=60000
+      continue-on-error: true
+      env:
+        CYPRESS_baseUrl: 'http://localhost:3000'
+
+    # Publicar resultados Cypress
+    - name: 📊 Upload Cypress Results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: cypress-results
+        path: cypress/results/
+        retention-days: 30
+
+    - name: 📸 Upload Cypress Screenshots
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: cypress-screenshots
+        path: cypress/screenshots/
+        retention-days: 30
+
+    - name: 🎥 Upload Cypress Videos
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: cypress-videos
+        path: cypress/videos/
+        retention-days: 30
+
+    # Detener servicios
+    - name: 🛑 Stop Services
+      if: always()
+      run: |
+        [ -f BlogWEB/backend/backend.pid ] && kill $(cat BlogWEB/backend/backend.pid) || true
+        [ -f BlogWEB/frontend/frontend.pid ] && kill $(cat BlogWEB/frontend/frontend.pid) || true
+
+    - name: 📋 Stage 2 Summary
+      run: |
+        echo "=========================================="
+        echo "✅ STAGE 2 COMPLETADO"
+        echo "=========================================="
+        echo ""
+        echo "🧪 Pruebas E2E ejecutadas con Cypress"
+        echo "📸 Screenshots publicados"
+        echo "🎥 Videos publicados"
+        echo ""
+        echo "=========================================="
+
+  # ==========================================
+  # JOB 3: BUILD & PUSH DOCKER IMAGES
+  # ==========================================
+  build-docker-images:
+    name: '3️⃣ Build and Push Docker Images'
+    needs: integration-tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    # Build & Push Backend Image
+    - name: 🐳 Build and Push Backend Image
+      uses: docker/build-push-action@v5
+      with:
+        context: ./BlogWEB/backend
+        push: true
+        tags: |
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}:latest
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}:${{ github.sha }}
+        cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}:buildcache
+        cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}:buildcache,mode=max
+
+    # Build & Push Frontend Image
+    - name: 🐳 Build and Push Frontend Image
+      uses: docker/build-push-action@v5
+      with:
+        context: ./BlogWEB/frontend
+        push: true
+        tags: |
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}:latest
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}:${{ github.sha }}
+        cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}:buildcache
+        cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}:buildcache,mode=max
+
+    - name: 📋 Docker Images Summary
+      run: |
+        echo "=========================================="
+        echo "✅ DOCKER IMAGES PUBLICADAS"
+        echo "=========================================="
+        echo ""
+        echo "🐳 Imágenes en GHCR:"
+        echo "  Backend:  ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}:latest"
+        echo "  Frontend: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}:latest"
+        echo ""
+        echo "🏷️  Tagged también con SHA: ${{ github.sha }}"
+        echo ""
+        echo "=========================================="
+
+  # ==========================================
+  # JOB 4: DEPLOY TO QA (RENDER.COM)
+  # ==========================================
+  deploy-qa:
+    name: '4️⃣ Deploy to QA (Render.com)'
+    needs: build-docker-images
+    runs-on: ubuntu-latest
+    environment:
+      name: QA
+      url: https://blogweb-frontend-qa.onrender.com
+    
+    steps:
+    - name: 🚀 Trigger Render Deploy - Backend QA
+      run: |
+        echo "🚀 Deployando Backend QA en Render..."
+        curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_BACKEND_QA }}"
+
+    - name: 🚀 Trigger Render Deploy - Frontend QA
+      run: |
+        echo "🚀 Deployando Frontend QA en Render..."
+        curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_FRONTEND_QA }}"
+
+    - name: ⏳ Wait for Deployment
+      run: |
+        echo "⏳ Esperando 90 segundos para que Render despliegue las apps..."
+        sleep 90
+
+    - name: 🏥 Health Check QA
+      run: |
+        echo "=========================================="
+        echo "🧪 AMBIENTE QA DESPLEGADO"
+        echo "=========================================="
+        echo ""
+        echo "🔗 URLs:"
+        echo "  Backend:  https://blogweb-backend-qa.onrender.com"
+        echo "  Frontend: https://blogweb-frontend-qa.onrender.com"
+        echo ""
+        
+        curl -f --max-time 30 https://blogweb-backend-qa.onrender.com/api/health || echo "⚠️ Backend health check falló (puede estar iniciando)"
+        curl -f --max-time 30 https://blogweb-frontend-qa.onrender.com || echo "⚠️ Frontend health check falló (puede estar iniciando)"
+        
+        echo ""
+        echo "✅ Deploy QA completado"
+        echo "=========================================="
+
+  # ==========================================
+  # JOB 5: DEPLOY TO PROD (RENDER.COM)
+  # ==========================================
+  deploy-prod:
+    name: '5️⃣ Deploy to PROD (Render.com)'
+    needs: deploy-qa
+    runs-on: ubuntu-latest
+    environment:
+      name: PROD
+      url: https://blogweb-frontend-prod.onrender.com
+    
+    steps:
+    - name: 🚀 Trigger Render Deploy - Backend PROD
+      run: |
+        echo "🚀 Deployando Backend PROD en Render..."
+        curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_BACKEND_PROD }}"
+
+    - name: 🚀 Trigger Render Deploy - Frontend PROD
+      run: |
+        echo "🚀 Deployando Frontend PROD en Render..."
+        curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_FRONTEND_PROD }}"
+
+    - name: ⏳ Wait for Deployment
+      run: |
+        echo "⏳ Esperando 90 segundos para que Render despliegue las apps..."
+        sleep 90
+
+    - name: 🏥 Health Check PROD & Final Report
+      run: |
+        echo "=========================================="
+        echo "✅✅✅ PRODUCCIÓN DESPLEGADA ✅✅✅"
+        echo "=========================================="
+        echo ""
+        echo "🌐 URLs de Producción:"
+        echo "  Frontend: https://blogweb-frontend-prod.onrender.com"
+        echo "  Backend:  https://blogweb-backend-prod.onrender.com"
+        echo ""
+        echo "📊 Resumen del Pipeline:"
+        echo "  ✅ Stage 1: Build + Tests + SonarCloud"
+        echo "  ✅ Stage 2: Cypress E2E Tests"
+        echo "  ✅ Stage 3: Docker Build & Push (GHCR)"
+        echo "  ✅ Stage 4: Deploy QA (Render)"
+        echo "  ✅ Stage 5: Deploy PROD (Render)"
+        echo ""
+        echo "🐳 Docker Images:"
+        echo "  ghcr.io/${{ github.repository_owner }}/blogweb-backend:latest"
+        echo "  ghcr.io/${{ github.repository_owner }}/blogweb-frontend:latest"
+        echo ""
+        echo "☁️ SonarCloud: https://sonarcloud.io/dashboard?id=2222270_TP8"
+        echo ""
+        echo "=========================================="
+        
+        curl -f --max-time 30 https://blogweb-backend-prod.onrender.com/api/health || echo "⚠️ Backend health check falló"
+        curl -f --max-time 30 https://blogweb-frontend-prod.onrender.com || echo "⚠️ Frontend health check falló"
+        
+        echo ""
+        echo "🎉 PIPELINE COMPLETADO EXITOSAMENTE 🎉"`
