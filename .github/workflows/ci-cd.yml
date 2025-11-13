@@ -101,13 +101,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      with:
-        args: >
-          -Dsonar.organization=2222270
-          -Dsonar.projectKey=2222270_TP8
-          -Dsonar.sources=BlogWEB/backend,BlogWEB/frontend
-          -Dsonar.exclusions=**/node_modules/**,**/test/**,**/coverage/**
-          -Dsonar.javascript.lcov.reportPaths=BlogWEB/backend/coverage/lcov.info,BlogWEB/frontend/coverage/lcov.info
 
     # ========== PACKAGE ARTIFACTS ==========
     
