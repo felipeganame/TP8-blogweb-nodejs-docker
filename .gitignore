@@ -137,3 +137,20 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Azure Pipelines (backup)
+azure-pipelines*.yml.old
+
+# Docker
+.dockerignore
+
+# Logs
+*.log
+npm-debug.log*
+
+# Coverage
+coverage/
+test-results/
+cypress/screenshots/
+cypress/videos/
+cypress/results/
