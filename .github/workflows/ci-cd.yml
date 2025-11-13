@@ -477,4 +477,4 @@ jobs:
         curl -f --max-time 30 https://blogweb-frontend-prod.onrender.com || echo "⚠️ Frontend health check falló"
         
         echo ""
-        echo "🎉 PIPELINE COMPLETADO EXITOSAMENTE 🎉"`
+        echo "🎉 PIPELINE COMPLETADO EXITOSAMENTE 🎉"
