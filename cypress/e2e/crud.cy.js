@@ -62,17 +62,11 @@ describe('BlogWEB - CRUD Integration Tests', () => {
     it('Debe registrar un nuevo usuario exitosamente', () => {
       cy.visit('/');
       
-      // Buscar y hacer click en el botón de registro (puede estar en varios lugares)
-      cy.get('body').then($body => {
-        if ($body.find('#goto-register').length > 0) {
-          cy.get('#goto-register').click();
-        } else if ($body.text().includes('Regístrate') || $body.text().includes('Registrarse')) {
-          cy.contains('Regístrate').click();
-        }
-      });
+      // Hacer click en el botón "¿No tienes cuenta? Regístrate"
+      cy.get('#goto-register', { timeout: 10000 }).should('be.visible').click();
       
       // Esperar a que aparezca el formulario de registro
-      cy.contains('Registrarse', { timeout: 5000 }).should('be.visible');
+      cy.get('h2', { timeout: 5000 }).contains('Registro').should('be.visible');
       
       // Llenar el formulario de registro
       cy.get('input[type="text"]').first().clear().type(testUser.username);
@@ -93,13 +87,7 @@ describe('BlogWEB - CRUD Integration Tests', () => {
       cy.visit('/');
       
       // Registrar usuario primero
-      cy.get('body').then($body => {
-        if ($body.find('#goto-register').length > 0) {
-          cy.get('#goto-register').click();
-        } else if ($body.text().includes('Regístrate') || $body.text().includes('Registrarse')) {
-          cy.contains('Regístrate').click();
-        }
-      });
+      cy.get('#goto-register', { timeout: 10000 }).should('be.visible').click();
       
       cy.get('input[type="text"]').first().clear().type(testUser.username);
       cy.get('input[type="email"]').clear().type(testUser.email);
@@ -131,14 +119,8 @@ describe('BlogWEB - CRUD Integration Tests', () => {
     it('Debe poder eliminar un comentario propio', () => {
       cy.visit('/');
       
-      // Registrar usuario
-      cy.get('body').then($body => {
-        if ($body.find('#goto-register').length > 0) {
-          cy.get('#goto-register').click();
-        } else if ($body.text().includes('Regístrate') || $body.text().includes('Registrarse')) {
-          cy.contains('Regístrate').click();
-        }
-      });
+      // Registrar usuario primero
+      cy.get('#goto-register', { timeout: 10000 }).should('be.visible').click();
       
       cy.get('input[type="text"]').first().clear().type(testUser.username + '_edit');
       cy.get('input[type="email"]').clear().type('edit_' + testUser.email);
@@ -198,13 +180,7 @@ describe('BlogWEB - CRUD Integration Tests', () => {
       cy.visit('/');
       
       // Ir a registro
-      cy.get('body').then($body => {
-        if ($body.find('#goto-register').length > 0) {
-          cy.get('#goto-register').click();
-        } else if ($body.text().includes('Regístrate') || $body.text().includes('Registrarse')) {
-          cy.contains('Regístrate').click();
-        }
-      });
+      cy.get('#goto-register', { timeout: 10000 }).should('be.visible').click();
       
       // Intentar registrar con email inválido
       cy.get('input[type="text"]').first().clear().type('testuser');
@@ -221,13 +197,7 @@ describe('BlogWEB - CRUD Integration Tests', () => {
       cy.visit('/');
       
       // Ir a registro
-      cy.get('body').then($body => {
-        if ($body.find('#goto-register').length > 0) {
-          cy.get('#goto-register').click();
-        } else if ($body.text().includes('Regístrate') || $body.text().includes('Registrarse')) {
-          cy.contains('Regístrate').click();
-        }
-      });
+      cy.get('#goto-register', { timeout: 10000 }).should('be.visible').click();
       
       // Intentar con contraseña muy corta
       cy.get('input[type="text"]').first().clear().type('testuser');
