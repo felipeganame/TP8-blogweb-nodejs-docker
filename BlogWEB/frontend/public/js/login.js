@@ -25,8 +25,8 @@ export function showLogin() {
   `;
 
   document.getElementById('login-form').addEventListener('submit', handleLogin);
-  document.getElementById('goto-register').addEventListener('click', () => {
-    const { showRegister } = require('./register.js');
+  document.getElementById('goto-register').addEventListener('click', async () => {
+    const { showRegister } = await import('./register.js');
     showRegister();
   });
 }

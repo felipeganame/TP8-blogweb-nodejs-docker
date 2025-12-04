@@ -1,75 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="79" failures="0" errors="0" time="5.939">
-  <testsuite name="Auth Middleware" errors="0" failures="0" skipped="0" timestamp="2025-11-13T22:00:01" time="4.736" tests="10">
-    <testcase classname="Auth Middleware › protect middleware" name="should authenticate with valid token" time="0.485">
+<testsuites name="jest tests" tests="79" failures="0" errors="0" time="4.726">
+  <testsuite name="Auth Middleware" errors="0" failures="0" skipped="0" timestamp="2025-12-04T19:31:30" time="3.537" tests="10">
+    <testcase classname="Auth Middleware › protect middleware" name="should authenticate with valid token" time="0.473">
     </testcase>
-    <testcase classname="Auth Middleware › protect middleware" name="should reject request without authorization header" time="0.079">
+    <testcase classname="Auth Middleware › protect middleware" name="should reject request without authorization header" time="0.078">
     </testcase>
     <testcase classname="Auth Middleware › protect middleware" name="should reject request with invalid token format" time="0.076">
     </testcase>
     <testcase classname="Auth Middleware › protect middleware" name="should reject request with malformed JWT token" time="0.074">
     </testcase>
-    <testcase classname="Auth Middleware › protect middleware" name="should reject request with expired token" time="0.076">
+    <testcase classname="Auth Middleware › protect middleware" name="should reject request with expired token" time="0.072">
     </testcase>
-    <testcase classname="Auth Middleware › protect middleware" name="should reject request with token signed with wrong secret" time="0.075">
+    <testcase classname="Auth Middleware › protect middleware" name="should reject request with token signed with wrong secret" time="0.074">
     </testcase>
-    <testcase classname="Auth Middleware › protect middleware" name="should reject request when user no longer exists" time="0.077">
+    <testcase classname="Auth Middleware › protect middleware" name="should reject request when user no longer exists" time="0.074">
     </testcase>
-    <testcase classname="Auth Middleware › protect middleware" name="should not include password in req.user" time="0.075">
+    <testcase classname="Auth Middleware › protect middleware" name="should not include password in req.user" time="0.073">
     </testcase>
     <testcase classname="Auth Middleware › protect middleware" name="should handle token without Bearer prefix gracefully" time="0.075">
     </testcase>
-    <testcase classname="Auth Middleware › protect middleware" name="should accept token with extra spaces in Bearer prefix" time="0.074">
+    <testcase classname="Auth Middleware › protect middleware" name="should accept token with extra spaces in Bearer prefix" time="0.072">
     </testcase>
   </testsuite>
-  <testsuite name="Auth Routes" errors="0" failures="0" skipped="0" timestamp="2025-11-13T22:00:01" time="5.251" tests="17">
-    <testcase classname="Auth Routes › POST /api/auth/register" name="should register a new user successfully" time="0.537">
+  <testsuite name="Auth Routes" errors="0" failures="0" skipped="0" timestamp="2025-12-04T19:31:30" time="4.019" tests="17">
+    <testcase classname="Auth Routes › POST /api/auth/register" name="should register a new user successfully" time="0.467">
     </testcase>
     <testcase classname="Auth Routes › POST /api/auth/register" name="should return validation error for short username" time="0.004">
     </testcase>
-    <testcase classname="Auth Routes › POST /api/auth/register" name="should return validation error for invalid email" time="0.003">
+    <testcase classname="Auth Routes › POST /api/auth/register" name="should return validation error for invalid email" time="0.004">
     </testcase>
-    <testcase classname="Auth Routes › POST /api/auth/register" name="should return validation error for short password" time="0.003">
+    <testcase classname="Auth Routes › POST /api/auth/register" name="should return validation error for short password" time="0.004">
     </testcase>
     <testcase classname="Auth Routes › POST /api/auth/register" name="should return error for duplicate email" time="0.083">
     </testcase>
     <testcase classname="Auth Routes › POST /api/auth/register" name="should return error for duplicate username" time="0.081">
     </testcase>
-    <testcase classname="Auth Routes › POST /api/auth/register" name="should trim and lowercase email on registration" time="0.081">
+    <testcase classname="Auth Routes › POST /api/auth/register" name="should trim and lowercase email on registration" time="0.078">
     </testcase>
-    <testcase classname="Auth Routes › POST /api/auth/register" name="should return all validation errors at once" time="0.002">
+    <testcase classname="Auth Routes › POST /api/auth/register" name="should return all validation errors at once" time="0.001">
     </testcase>
-    <testcase classname="Auth Routes › POST /api/auth/register" name="should require all fields" time="0.003">
+    <testcase classname="Auth Routes › POST /api/auth/register" name="should require all fields" time="0.001">
     </testcase>
-    <testcase classname="Auth Routes › POST /api/auth/login" name="should login successfully with correct credentials" time="0.148">
+    <testcase classname="Auth Routes › POST /api/auth/login" name="should login successfully with correct credentials" time="0.146">
     </testcase>
-    <testcase classname="Auth Routes › POST /api/auth/login" name="should return error for non-existent email" time="0.077">
+    <testcase classname="Auth Routes › POST /api/auth/login" name="should return error for non-existent email" time="0.074">
     </testcase>
-    <testcase classname="Auth Routes › POST /api/auth/login" name="should return error for incorrect password" time="0.15">
+    <testcase classname="Auth Routes › POST /api/auth/login" name="should return error for incorrect password" time="0.146">
     </testcase>
     <testcase classname="Auth Routes › POST /api/auth/login" name="should return validation error for invalid email format" time="0.075">
     </testcase>
     <testcase classname="Auth Routes › POST /api/auth/login" name="should return validation error for empty password" time="0.075">
     </testcase>
-    <testcase classname="Auth Routes › POST /api/auth/login" name="should handle case-insensitive email login" time="0.149">
+    <testcase classname="Auth Routes › POST /api/auth/login" name="should handle case-insensitive email login" time="0.166">
     </testcase>
-    <testcase classname="Auth Routes › POST /api/auth/login" name="should return JWT token on successful login" time="0.146">
+    <testcase classname="Auth Routes › POST /api/auth/login" name="should return JWT token on successful login" time="0.145">
     </testcase>
-    <testcase classname="Auth Routes › POST /api/auth/login" name="should require both email and password" time="0.074">
+    <testcase classname="Auth Routes › POST /api/auth/login" name="should require both email and password" time="0.073">
     </testcase>
   </testsuite>
-  <testsuite name="User Model" errors="0" failures="0" skipped="0" timestamp="2025-11-13T22:00:01" time="5.527" tests="16">
-    <testcase classname="User Model › User Creation" name="should create a valid user" time="0.481">
+  <testsuite name="User Model" errors="0" failures="0" skipped="0" timestamp="2025-12-04T19:31:30" time="4.36" tests="16">
+    <testcase classname="User Model › User Creation" name="should create a valid user" time="0.484">
     </testcase>
-    <testcase classname="User Model › User Creation" name="should hash password before saving" time="0.148">
+    <testcase classname="User Model › User Creation" name="should hash password before saving" time="0.146">
     </testcase>
-    <testcase classname="User Model › User Creation" name="should trim and lowercase email" time="0.077">
+    <testcase classname="User Model › User Creation" name="should trim and lowercase email" time="0.074">
     </testcase>
     <testcase classname="User Model › User Creation" name="should trim username" time="0.074">
     </testcase>
     <testcase classname="User Model › User Validation" name="should require username" time="0.002">
     </testcase>
-    <testcase classname="User Model › User Validation" name="should require email" time="0.002">
+    <testcase classname="User Model › User Validation" name="should require email" time="0.001">
     </testcase>
     <testcase classname="User Model › User Validation" name="should require password" time="0.001">
     </testcase>
@@ -77,95 +77,95 @@
     </testcase>
     <testcase classname="User Model › User Validation" name="should enforce minimum password length" time="0.001">
     </testcase>
-    <testcase classname="User Model › User Validation" name="should require unique email" time="0.154">
+    <testcase classname="User Model › User Validation" name="should require unique email" time="0.152">
     </testcase>
-    <testcase classname="User Model › User Validation" name="should require unique username" time="0.148">
+    <testcase classname="User Model › User Validation" name="should require unique username" time="0.144">
     </testcase>
-    <testcase classname="User Model › comparePassword method" name="should return true for correct password" time="0.146">
+    <testcase classname="User Model › comparePassword method" name="should return true for correct password" time="0.145">
     </testcase>
-    <testcase classname="User Model › comparePassword method" name="should return false for incorrect password" time="0.145">
+    <testcase classname="User Model › comparePassword method" name="should return false for incorrect password" time="0.17">
     </testcase>
-    <testcase classname="User Model › comparePassword method" name="should handle empty password comparison" time="0.145">
+    <testcase classname="User Model › comparePassword method" name="should handle empty password comparison" time="0.142">
     </testcase>
-    <testcase classname="User Model › Password Update" name="should rehash password when updated" time="0.288">
+    <testcase classname="User Model › Password Update" name="should rehash password when updated" time="0.284">
     </testcase>
-    <testcase classname="User Model › Password Update" name="should not rehash password if not modified" time="0.074">
+    <testcase classname="User Model › Password Update" name="should not rehash password if not modified" time="0.072">
     </testcase>
   </testsuite>
-  <testsuite name="Comment Model" errors="0" failures="0" skipped="0" timestamp="2025-11-13T22:00:01" time="5.596" tests="18">
-    <testcase classname="Comment Model › Comment Creation" name="should create a valid comment" time="0.552">
+  <testsuite name="Comment Model" errors="0" failures="0" skipped="0" timestamp="2025-12-04T19:31:30" time="4.411" tests="18">
+    <testcase classname="Comment Model › Comment Creation" name="should create a valid comment" time="0.529">
     </testcase>
-    <testcase classname="Comment Model › Comment Creation" name="should trim comment content" time="0.077">
+    <testcase classname="Comment Model › Comment Creation" name="should trim comment content" time="0.076">
     </testcase>
-    <testcase classname="Comment Model › Comment Creation" name="should populate author reference" time="0.086">
+    <testcase classname="Comment Model › Comment Creation" name="should populate author reference" time="0.084">
     </testcase>
     <testcase classname="Comment Model › Comment Validation" name="should require content" time="0.075">
     </testcase>
-    <testcase classname="Comment Model › Comment Validation" name="should require author" time="0.075">
+    <testcase classname="Comment Model › Comment Validation" name="should require author" time="0.074">
     </testcase>
-    <testcase classname="Comment Model › Comment Validation" name="should require authorUsername" time="0.075">
+    <testcase classname="Comment Model › Comment Validation" name="should require authorUsername" time="0.074">
     </testcase>
     <testcase classname="Comment Model › Comment Validation" name="should enforce maximum content length" time="0.074">
     </testcase>
-    <testcase classname="Comment Model › Comment Validation" name="should allow content at maximum length" time="0.077">
+    <testcase classname="Comment Model › Comment Validation" name="should allow content at maximum length" time="0.074">
     </testcase>
-    <testcase classname="Comment Model › Comment Validation" name="should reject empty content after trim" time="0.075">
+    <testcase classname="Comment Model › Comment Validation" name="should reject empty content after trim" time="0.073">
     </testcase>
     <testcase classname="Comment Model › Comment Queries" name="should find all comments" time="0.076">
     </testcase>
-    <testcase classname="Comment Model › Comment Queries" name="should find comments by author" time="0.08">
+    <testcase classname="Comment Model › Comment Queries" name="should find comments by author" time="0.076">
     </testcase>
-    <testcase classname="Comment Model › Comment Queries" name="should sort comments by creation date descending" time="0.076">
+    <testcase classname="Comment Model › Comment Queries" name="should sort comments by creation date descending" time="0.109">
     </testcase>
-    <testcase classname="Comment Model › Comment Update" name="should update comment content" time="0.077">
+    <testcase classname="Comment Model › Comment Update" name="should update comment content" time="0.076">
     </testcase>
     <testcase classname="Comment Model › Comment Update" name="should update updatedAt timestamp on modification" time="0.175">
     </testcase>
-    <testcase classname="Comment Model › Comment Deletion" name="should delete a comment" time="0.075">
+    <testcase classname="Comment Model › Comment Deletion" name="should delete a comment" time="0.073">
     </testcase>
     <testcase classname="Comment Model › Comment Deletion" name="should delete all comments by author" time="0.075">
     </testcase>
     <testcase classname="Comment Model › Author Reference Integrity" name="should accept valid ObjectId for author" time="0.073">
     </testcase>
-    <testcase classname="Comment Model › Author Reference Integrity" name="should reject invalid ObjectId for author" time="0.074">
+    <testcase classname="Comment Model › Author Reference Integrity" name="should reject invalid ObjectId for author" time="0.073">
     </testcase>
   </testsuite>
-  <testsuite name="Comment Routes" errors="0" failures="0" skipped="0" timestamp="2025-11-13T22:00:01" time="5.806" tests="18">
-    <testcase classname="Comment Routes › GET /api/comments" name="should return empty array when no comments exist" time="0.05">
+  <testsuite name="Comment Routes" errors="0" failures="0" skipped="0" timestamp="2025-12-04T19:31:30" time="4.588" tests="18">
+    <testcase classname="Comment Routes › GET /api/comments" name="should return empty array when no comments exist" time="0.056">
     </testcase>
-    <testcase classname="Comment Routes › GET /api/comments" name="should return all comments" time="0.496">
+    <testcase classname="Comment Routes › GET /api/comments" name="should return all comments" time="0.464">
     </testcase>
     <testcase classname="Comment Routes › GET /api/comments" name="should return comments sorted by _id descending (newest first)" time="0.104">
     </testcase>
-    <testcase classname="Comment Routes › GET /api/comments" name="should not require authentication" time="0.005">
+    <testcase classname="Comment Routes › GET /api/comments" name="should not require authentication" time="0.007">
     </testcase>
-    <testcase classname="Comment Routes › POST /api/comments" name="should create a comment with valid authentication" time="0.092">
+    <testcase classname="Comment Routes › POST /api/comments" name="should create a comment with valid authentication" time="0.088">
     </testcase>
-    <testcase classname="Comment Routes › POST /api/comments" name="should return 401 without authentication token" time="0.078">
+    <testcase classname="Comment Routes › POST /api/comments" name="should return 401 without authentication token" time="0.077">
     </testcase>
-    <testcase classname="Comment Routes › POST /api/comments" name="should return validation error for empty content" time="0.079">
+    <testcase classname="Comment Routes › POST /api/comments" name="should return validation error for empty content" time="0.078">
     </testcase>
-    <testcase classname="Comment Routes › POST /api/comments" name="should return validation error for content exceeding 1000 characters" time="0.077">
+    <testcase classname="Comment Routes › POST /api/comments" name="should return validation error for content exceeding 1000 characters" time="0.079">
     </testcase>
-    <testcase classname="Comment Routes › POST /api/comments" name="should trim whitespace from content" time="0.082">
+    <testcase classname="Comment Routes › POST /api/comments" name="should trim whitespace from content" time="0.079">
     </testcase>
-    <testcase classname="Comment Routes › POST /api/comments" name="should reject content with only whitespace" time="0.077">
+    <testcase classname="Comment Routes › POST /api/comments" name="should reject content with only whitespace" time="0.075">
     </testcase>
-    <testcase classname="Comment Routes › POST /api/comments" name="should automatically set author from authenticated user" time="0.077">
+    <testcase classname="Comment Routes › POST /api/comments" name="should automatically set author from authenticated user" time="0.076">
     </testcase>
     <testcase classname="Comment Routes › POST /api/comments" name="should reject request with invalid token" time="0.074">
     </testcase>
-    <testcase classname="Comment Routes › DELETE /api/comments/:id" name="should delete own comment" time="0.153">
+    <testcase classname="Comment Routes › DELETE /api/comments/:id" name="should delete own comment" time="0.177">
     </testcase>
-    <testcase classname="Comment Routes › DELETE /api/comments/:id" name="should return 401 without authentication" time="0.15">
+    <testcase classname="Comment Routes › DELETE /api/comments/:id" name="should return 401 without authentication" time="0.147">
     </testcase>
-    <testcase classname="Comment Routes › DELETE /api/comments/:id" name="should return 404 for non-existent comment" time="0.147">
+    <testcase classname="Comment Routes › DELETE /api/comments/:id" name="should return 404 for non-existent comment" time="0.146">
     </testcase>
-    <testcase classname="Comment Routes › DELETE /api/comments/:id" name="should return 403 when trying to delete another user&apos;s comment" time="0.149">
+    <testcase classname="Comment Routes › DELETE /api/comments/:id" name="should return 403 when trying to delete another user&apos;s comment" time="0.147">
     </testcase>
     <testcase classname="Comment Routes › DELETE /api/comments/:id" name="should return 500 for invalid comment ID format" time="0.176">
     </testcase>
-    <testcase classname="Comment Routes › DELETE /api/comments/:id" name="should allow user to delete their own comment even if others exist" time="0.146">
+    <testcase classname="Comment Routes › DELETE /api/comments/:id" name="should allow user to delete their own comment even if others exist" time="0.145">
     </testcase>
   </testsuite>
 </testsuites>

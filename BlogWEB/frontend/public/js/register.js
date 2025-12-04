@@ -28,8 +28,8 @@ export function showRegister() {
   `;
 
   document.getElementById('register-form').addEventListener('submit', handleRegister);
-  document.getElementById('goto-login').addEventListener('click', () => {
-    const { showLogin } = require('./login.js');
+  document.getElementById('goto-login').addEventListener('click', async () => {
+    const { showLogin } = await import('./login.js');
     showLogin();
   });
 }

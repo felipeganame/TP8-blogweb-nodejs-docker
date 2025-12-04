@@ -19,6 +19,10 @@ describe('BlogWEB - CRUD Integration Tests', () => {
     // Limpiar cookies y localStorage antes de cada test
     cy.clearCookies();
     cy.clearLocalStorage();
+    // Visitar la página principal
+    cy.visit('/');
+    // Esperar a que la aplicación se cargue
+    cy.get('#app', { timeout: 10000 }).should('exist');
   });
 
   /**
@@ -26,8 +30,6 @@ describe('BlogWEB - CRUD Integration Tests', () => {
    */
   describe('Test 1: Cargar página principal', () => {
     it('Debe cargar la página principal correctamente', () => {
-      cy.visit('/');
-      
       // Verificar que el título esté presente
       cy.contains('BlogWEB').should('be.visible');
       
@@ -46,10 +48,11 @@ describe('BlogWEB - CRUD Integration Tests', () => {
     });
 
     it('Debe mostrar la sección de comentarios', () => {
-      cy.visit('/');
-      
       // Esperar a que se carguen los comentarios
       cy.contains('Comentarios', { timeout: 10000 }).should('be.visible');
+      
+      // Verificar que existe el botón de ver comentarios
+      cy.get('#comments-btn').should('be.visible');
       
       cy.log('✅ Sección de comentarios visible');
     });
@@ -60,48 +63,50 @@ describe('BlogWEB - CRUD Integration Tests', () => {
    */
   describe('Test 2: Crear nuevo registro', () => {
     it('Debe registrar un nuevo usuario exitosamente', () => {
-      cy.visit('/');
-      
-      // Hacer click en el botón "¿No tienes cuenta? Regístrate"
-      cy.get('#goto-register', { timeout: 10000 }).should('be.visible').click();
+      // Hacer click en el botón "Registrarse" del navbar
+      cy.get('#register-btn', { timeout: 10000 }).should('be.visible').click();
       
       // Esperar a que aparezca el formulario de registro
-      cy.get('h2', { timeout: 5000 }).contains('Registro').should('be.visible');
+      cy.contains('h2', 'Registrarse', { timeout: 5000 }).should('be.visible');
       
       // Llenar el formulario de registro
-      cy.get('input[type="text"]').first().clear().type(testUser.username);
-      cy.get('input[type="email"]').clear().type(testUser.email);
-      cy.get('input[type="password"]').clear().type(testUser.password);
+      cy.get('#username').clear().type(testUser.username);
+      cy.get('#email').clear().type(testUser.email);
+      cy.get('#password').clear().type(testUser.password);
       
       // Enviar el formulario
-      cy.get('button[type="submit"]').contains('Registrarse').click();
+      cy.get('#register-form button[type="submit"]').click();
       
       // Verificar que el registro fue exitoso
-      // El usuario debería ser redirigido o ver su nombre
-      cy.contains(testUser.username, { timeout: 10000 }).should('exist');
+      // El usuario debería ver su nombre en el navbar después del reload
+      cy.contains(`Hola, ${testUser.username}`, { timeout: 10000 }).should('be.visible');
       
       cy.log('✅ Usuario registrado exitosamente');
     });
 
     it('Debe crear un nuevo comentario después de registrarse', () => {
-      cy.visit('/');
+      const uniqueUser = {
+        username: `testuser_${Date.now()}`,
+        email: `test_${Date.now()}@example.com`,
+        password: 'Password123!'
+      };
       
       // Registrar usuario primero
-      cy.get('#goto-register', { timeout: 10000 }).should('be.visible').click();
+      cy.get('#register-btn', { timeout: 10000 }).should('be.visible').click();
       
-      cy.get('input[type="text"]').first().clear().type(testUser.username);
-      cy.get('input[type="email"]').clear().type(testUser.email);
-      cy.get('input[type="password"]').clear().type(testUser.password);
-      cy.get('button[type="submit"]').contains('Registrarse').click();
+      cy.get('#username').clear().type(uniqueUser.username);
+      cy.get('#email').clear().type(uniqueUser.email);
+      cy.get('#password').clear().type(uniqueUser.password);
+      cy.get('#register-form button[type="submit"]').click();
       
-      // Esperar a que se complete el registro
-      cy.wait(2000);
+      // Esperar a que se complete el registro y recargue la página
+      cy.contains(`Hola, ${uniqueUser.username}`, { timeout: 10000 }).should('be.visible');
       
       // Buscar el formulario de comentarios
-      cy.get('textarea').should('be.visible').clear().type(testComment.content);
+      cy.get('#comment-content', { timeout: 5000 }).should('be.visible').clear().type(testComment.content);
       
       // Publicar comentario
-      cy.contains('button', 'Publicar').click();
+      cy.get('#comment-form button[type="submit"]').click();
       
       // Verificar que el comentario aparece en la lista
       cy.contains(testComment.content, { timeout: 10000 }).should('be.visible');
@@ -117,53 +122,62 @@ describe('BlogWEB - CRUD Integration Tests', () => {
    */
   describe('Test 3: Editar/Actualizar registro existente', () => {
     it('Debe poder eliminar un comentario propio', () => {
-      cy.visit('/');
+      const uniqueUser = {
+        username: `testuser_edit_${Date.now()}`,
+        email: `edit_${Date.now()}@example.com`,
+        password: 'Password123!'
+      };
       
       // Registrar usuario primero
-      cy.get('#goto-register', { timeout: 10000 }).should('be.visible').click();
+      cy.get('#register-btn', { timeout: 10000 }).should('be.visible').click();
       
-      cy.get('input[type="text"]').first().clear().type(testUser.username + '_edit');
-      cy.get('input[type="email"]').clear().type('edit_' + testUser.email);
-      cy.get('input[type="password"]').clear().type(testUser.password);
-      cy.get('button[type="submit"]').contains('Registrarse').click();
+      cy.get('#username').clear().type(uniqueUser.username);
+      cy.get('#email').clear().type(uniqueUser.email);
+      cy.get('#password').clear().type(uniqueUser.password);
+      cy.get('#register-form button[type="submit"]').click();
       
-      cy.wait(2000);
+      // Esperar a que se complete el registro
+      cy.contains(`Hola, ${uniqueUser.username}`, { timeout: 10000 }).should('be.visible');
       
       // Crear comentario
-      cy.get('textarea').should('be.visible').clear().type('Comentario a eliminar');
-      cy.contains('button', 'Publicar').click();
+      cy.get('#comment-content', { timeout: 5000 }).should('be.visible').clear().type('Comentario a eliminar');
+      cy.get('#comment-form button[type="submit"]').click();
       
-      cy.wait(2000);
+      // Esperar a que se cree el comentario
+      cy.contains('Comentario a eliminar', { timeout: 10000 }).should('be.visible');
       
       // Buscar y hacer click en el botón de eliminar
-      cy.contains('button', 'Eliminar').should('be.visible').click();
+      cy.contains('button', 'Eliminar', { timeout: 5000 }).should('be.visible').click();
       
-      // Confirmar la eliminación (si hay alert)
+      // Confirmar la eliminación
       cy.on('window:confirm', () => true);
       
-      cy.wait(1000);
+      // Verificar que el comentario ya no existe
+      cy.contains('Comentario a eliminar').should('not.exist');
       
       cy.log('✅ Comentario eliminado exitosamente');
     });
 
     it('Debe poder crear un comentario actualizado después de eliminar', () => {
-      cy.visit('/');
+      const uniqueUser = {
+        username: `testuser_update_${Date.now()}`,
+        email: `update_${Date.now()}@example.com`,
+        password: 'Password123!'
+      };
       
-      // Iniciar sesión (si es necesario, registrar de nuevo)
-      cy.get('body').then($body => {
-        if ($body.find('#goto-register').length > 0) {
-          cy.get('#goto-register').click();
-          cy.get('input[type="text"]').first().clear().type(testUser.username + '_update');
-          cy.get('input[type="email"]').clear().type('update_' + testUser.email);
-          cy.get('input[type="password"]').clear().type(testUser.password);
-          cy.get('button[type="submit"]').contains('Registrarse').click();
-          cy.wait(2000);
-        }
-      });
+      // Registrar usuario
+      cy.get('#register-btn', { timeout: 10000 }).should('be.visible').click();
+      cy.get('#username').clear().type(uniqueUser.username);
+      cy.get('#email').clear().type(uniqueUser.email);
+      cy.get('#password').clear().type(uniqueUser.password);
+      cy.get('#register-form button[type="submit"]').click();
+      
+      // Esperar registro
+      cy.contains(`Hola, ${uniqueUser.username}`, { timeout: 10000 }).should('be.visible');
       
       // Crear nuevo comentario (simulando actualización)
-      cy.get('textarea').should('be.visible').clear().type(editedComment.content);
-      cy.contains('button', 'Publicar').click();
+      cy.get('#comment-content', { timeout: 5000 }).should('be.visible').clear().type(editedComment.content);
+      cy.get('#comment-form button[type="submit"]').click();
       
       // Verificar que el nuevo comentario aparece
       cy.contains(editedComment.content, { timeout: 10000 }).should('be.visible');
@@ -177,93 +191,81 @@ describe('BlogWEB - CRUD Integration Tests', () => {
    */
   describe('Test 4: Validar manejo de errores', () => {
     it('Debe mostrar error al intentar registrar con email inválido', () => {
-      cy.visit('/');
-      
       // Ir a registro
-      cy.get('#goto-register', { timeout: 10000 }).should('be.visible').click();
+      cy.get('#register-btn', { timeout: 10000 }).should('be.visible').click();
       
       // Intentar registrar con email inválido
-      cy.get('input[type="text"]').first().clear().type('testuser');
-      cy.get('input[type="email"]').clear().type('emailinvalido');
-      cy.get('input[type="password"]').clear().type('12345');
+      cy.get('#username').clear().type('testuser');
+      cy.get('#email').clear().type('emailinvalido');
+      cy.get('#password').clear().type('12345');
       
       // El formulario HTML5 debería prevenir el envío
-      cy.get('input[type="email"]:invalid').should('exist');
+      cy.get('#email:invalid').should('exist');
       
       cy.log('✅ Validación de email funcionando correctamente');
     });
 
     it('Debe mostrar error al intentar registrar con contraseña corta', () => {
-      cy.visit('/');
-      
       // Ir a registro
-      cy.get('#goto-register', { timeout: 10000 }).should('be.visible').click();
+      cy.get('#register-btn', { timeout: 10000 }).should('be.visible').click();
       
       // Intentar con contraseña muy corta
-      cy.get('input[type="text"]').first().clear().type('testuser');
-      cy.get('input[type="email"]').clear().type('test@example.com');
-      cy.get('input[type="password"]').clear().type('123');
+      cy.get('#username').clear().type('testuser');
+      cy.get('#email').clear().type('test@example.com');
+      cy.get('#password').clear().type('123');
       
       // Verificar validación de minlength
-      cy.get('input[type="password"]:invalid').should('exist');
+      cy.get('#password:invalid').should('exist');
       
       cy.log('✅ Validación de contraseña funcionando correctamente');
     });
 
     it('Debe mostrar error al intentar comentar sin estar logueado', () => {
-      cy.visit('/');
-      
       // Verificar que no hay formulario de comentarios para usuarios no logueados
-      cy.get('body').then($body => {
-        if ($body.find('textarea').length === 0) {
-          // No hay textarea, correcto - usuario no logueado no puede comentar
-          cy.contains('Inicia sesión', { timeout: 5000 }).should('be.visible');
-          cy.log('✅ Correctamente previene comentar sin login');
-        }
-      });
+      cy.get('#comment-content').should('not.exist');
+      
+      // Verificar que hay mensaje para iniciar sesión
+      cy.contains('Inicia sesión', { timeout: 5000 }).should('be.visible');
+      
+      cy.log('✅ Correctamente previene comentar sin login');
     });
 
     it('Debe manejar correctamente la navegación entre login y registro', () => {
-      cy.visit('/');
+      // Ir a login
+      cy.get('#login-btn', { timeout: 10000 }).should('be.visible').click();
+      cy.contains('h2', 'Iniciar Sesión', { timeout: 5000 }).should('be.visible');
       
-      // Ir a registro
-      cy.get('body').then($body => {
-        if ($body.find('#goto-register').length > 0) {
-          cy.get('#goto-register').click();
-          cy.contains('Registrarse', { timeout: 5000 }).should('be.visible');
-          
-          // Volver a login
-          cy.get('#goto-login').should('be.visible').click();
-          cy.contains('Iniciar Sesión', { timeout: 5000 }).should('be.visible');
-          
-          cy.log('✅ Navegación entre formularios funciona correctamente');
-        }
-      });
+      // Ir a registro desde login
+      cy.get('#goto-register').should('be.visible').click();
+      cy.contains('h2', 'Registrarse', { timeout: 5000 }).should('be.visible');
+      
+      // Volver a login
+      cy.get('#goto-login').should('be.visible').click();
+      cy.contains('h2', 'Iniciar Sesión', { timeout: 5000 }).should('be.visible');
+      
+      cy.log('✅ Navegación entre formularios funciona correctamente');
     });
 
     it('Debe manejar timeout de red simulado', () => {
       // Interceptar llamadas de API para simular timeout
       cy.intercept('POST', '**/api/auth/register', {
-        delay: 15000, // Simular timeout
-        forceNetworkError: true
+        delay: 5000,
+        statusCode: 500,
+        body: { error: 'Network timeout' }
       }).as('registerTimeout');
       
-      cy.visit('/');
+      // Ir a registro
+      cy.get('#register-btn', { timeout: 10000 }).should('be.visible').click();
+      cy.get('#username').type('testuser');
+      cy.get('#email').type('test@example.com');
+      cy.get('#password').type('Password123!');
+      cy.get('#register-form button[type="submit"]').click();
       
-      // Intentar registrar
-      cy.get('body').then($body => {
-        if ($body.find('#goto-register').length > 0) {
-          cy.get('#goto-register').click();
-          cy.get('input[type="text"]').first().type('testuser');
-          cy.get('input[type="email"]').type('test@example.com');
-          cy.get('input[type="password"]').type('Password123!');
-          cy.get('button[type="submit"]').contains('Registrarse').click();
-          
-          // Debería mostrar algún tipo de error o quedarse en el formulario
-          cy.wait(2000);
-          cy.log('✅ Manejo de timeout verificado');
-        }
-      });
+      // Debería mostrar algún tipo de error
+      cy.wait('@registerTimeout');
+      cy.get('#register-error', { timeout: 10000 }).should('be.visible');
+      
+      cy.log('✅ Manejo de timeout verificado');
     });
   });
 
