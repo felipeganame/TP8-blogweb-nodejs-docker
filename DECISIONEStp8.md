@@ -261,4 +261,4 @@ tags: |
 # Si PROD falla, volver a versión anterior
 render deploy --image ghcr.io/felipeganame/blogweb-backend:abc123
 ```
-estoy forzando un push para probar
+force push 2
