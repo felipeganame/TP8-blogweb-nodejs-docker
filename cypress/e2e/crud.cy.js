@@ -214,8 +214,18 @@ describe('BlogWEB - CRUD Integration Tests', () => {
       cy.get('#email').clear().type('test@example.com');
       cy.get('#password').clear().type('123');
       
-      // Verificar validación de minlength
-      cy.get('#password:invalid').should('exist');
+      // Intentar enviar el formulario para activar la validación
+      cy.get('#register-form button[type="submit"]').click();
+      
+      // Verificar que el campo tiene el atributo minlength y está marcado como inválido
+      cy.get('#password').should('have.attr', 'minlength', '6');
+      cy.get('#password').then($input => {
+        expect($input[0].validity.valid).to.be.false;
+        expect($input[0].validity.tooShort).to.be.true;
+      });
+      
+      // Verificar que no se redirigió (se quedó en el formulario)
+      cy.contains('h2', 'Registrarse').should('be.visible');
       
       cy.log('✅ Validación de contraseña funcionando correctamente');
     });
