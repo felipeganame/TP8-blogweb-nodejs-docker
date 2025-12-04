@@ -186,7 +186,7 @@ jobs:
     - name: 🚀 Start Backend
       working-directory: ./BlogWEB/backend
       run: |
-        export MONGODB_URI="${{ secrets.COSMOSDB_CONNECTION_STRING_QA }}"
+        export MONGODB_URI="${{ secrets.MONGODB_URI_QA }}"
         export JWT_SECRET="${{ secrets.JWT_SECRET }}"
         export PORT=8080
         export NODE_ENV=test
