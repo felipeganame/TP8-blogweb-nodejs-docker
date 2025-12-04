@@ -12,8 +12,7 @@ describe('Auth Module', () => {
       const user = auth.getUser();
 
       // Assert
-      // ⚠️ TEST INTENCIONALMENTE ROTO PARA DEMOSTRAR FALLO EN PIPELINE
-      expect(user).toBe('este test debe fallar intencionalmente');
+      expect(user).toBeNull();
     });
 
     it('should return user object when user is stored', () => {
