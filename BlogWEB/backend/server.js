@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import authRoutes from './routes/auth.js';
 import commentRoutes from './routes/comments.js';
+import testCleanupRoutes from './routes/test-cleanup.js';
 
 dotenv.config();
 
@@ -25,6 +26,12 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/comments', commentRoutes);
+
+// Test cleanup route (only available in non-production environments)
+if (process.env.NODE_ENV !== 'production') {
+  app.use('/api/test', testCleanupRoutes);
+  console.log('🧪 Test cleanup endpoint enabled: DELETE /api/test/cleanup');
+}
 
 // Health check
 app.get('/api/health', (req, res) => {

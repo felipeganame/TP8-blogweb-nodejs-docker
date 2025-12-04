@@ -15,6 +15,10 @@ describe('BlogWEB - CRUD Integration Tests', () => {
     content: 'Comentario editado mediante Cypress - actualizado exitosamente'
   };
 
+  // Lista para rastrear comentarios creados durante los tests
+  const createdCommentIds = [];
+  const createdUserTokens = [];
+
   beforeEach(() => {
     // Limpiar cookies y localStorage antes de cada test
     cy.clearCookies();
@@ -284,6 +288,29 @@ describe('BlogWEB - CRUD Integration Tests', () => {
 
   // Cleanup después de todos los tests
   after(() => {
-    cy.log('🧹 Tests completados - limpieza finalizada');
+    cy.log('🧹 Iniciando limpieza de datos de prueba...');
+    
+    const apiUrl = Cypress.config('baseUrl').replace(':3000', ':8080');
+    
+    // Llamar al endpoint de limpieza
+    cy.request({
+      method: 'DELETE',
+      url: `${apiUrl}/api/test/cleanup`,
+      failOnStatusCode: false
+    }).then((response) => {
+      if (response.status === 200) {
+        cy.log(`✅ Limpieza exitosa:`);
+        cy.log(`   - Usuarios eliminados: ${response.body.deleted.users}`);
+        cy.log(`   - Comentarios eliminados: ${response.body.deleted.comments}`);
+      } else {
+        cy.log(`⚠️ No se pudo limpiar: ${response.body.message || 'Error desconocido'}`);
+      }
+    });
+    
+    // Limpiar localStorage y cookies
+    cy.clearLocalStorage();
+    cy.clearCookies();
+    
+    cy.log('✅ Tests completados');
   });
 });
