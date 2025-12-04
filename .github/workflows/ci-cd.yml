@@ -44,7 +44,6 @@ jobs:
     - name: 🧪 Backend - Run Tests with Coverage
       working-directory: ./BlogWEB/backend
       run: npm run test:coverage
-      continue-on-error: true
       env:
         NODE_ENV: test
 
@@ -73,7 +72,6 @@ jobs:
     - name: 🧪 Frontend - Run Tests with Coverage
       working-directory: ./BlogWEB/frontend
       run: npm run test:coverage
-      continue-on-error: true
       env:
         NODE_ENV: test
 
@@ -265,7 +263,6 @@ jobs:
           --reporter junit \
           --reporter-options "mochaFile=cypress/results/junit-[hash].xml,toConsole=true" \
           --config video=true,screenshotOnRunFailure=true,defaultCommandTimeout=10000,pageLoadTimeout=60000
-      continue-on-error: true
       env:
         CYPRESS_baseUrl: 'http://localhost:3000'
 
